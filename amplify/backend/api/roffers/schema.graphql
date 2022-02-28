@@ -1,0 +1,4 @@
+type Roffers @model @auth(rules: [{allow: public}, {allow: groups, groups: ["admins"], operations: [read, create, update, delete]}, {allow: groups, groups: ["buyers"], operations: [read]}, {allow: groups, groups: ["sellers"], operations: [read, create, update]}]) {
+  id: ID!
+  restaurant: String
+}

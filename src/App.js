@@ -1,7 +1,15 @@
+import * as React from 'react'
+import awsconfig from './aws-exports';
+import Amplify, { Auth } from 'aws-amplify';
 import logo from './logo.svg';
 import './App.css';
+import SignInScreen from './users/SignInScreen'
 
 function App() {
+  React.useState(() => {
+    Amplify.configure(awsconfig);
+  },[])
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +25,7 @@ function App() {
         >
           Learn React
         </a>
+        <SignInScreen/>
       </header>
     </div>
   );
