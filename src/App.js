@@ -1,34 +1,49 @@
 import * as React from 'react'
-import awsconfig from './aws-exports';
-import Amplify, { Auth } from 'aws-amplify';
 import logo from './logo.svg';
-import './App.css';
-import SignInScreen from './users/SignInScreen'
+import { UserProvider } from './context/userContext.js'
+import {
+  BrowserRouter,
+  useRouteMatch,
+  Routes,
+  Route
+} from 'react-router-dom'
+import useAppLoad from './hooks/useAppLoad'
+import SignInScreen from './auth/SignInScreen'
+import SellerScreen from './seller/SellerScreen'
+import DashboardScreen from './offer/DashboardScreen'
+
 
 function App() {
-  React.useState(() => {
-    Amplify.configure(awsconfig);
-  },[])
+  const [auth, user] = useAppLoad()
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <SignInScreen/>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {auth ? (
+          <Route path="*" element={ <MainElement user={user}/> }/>
+        ) : (
+          <>
+            <Route path="/" element={ <SignInScreen/> }/>
+            <Route path="*" element={ <div>noay cafe</div> }/>
+          </>
+        )}
+      </Routes>
+    </BrowserRouter>
   );
+}
+
+function MainElement (props) {
+  return (
+    <UserProvider user={props.user}>
+      <Routes>
+        <Route path="/" element={ <DashboardScreen/> }/>
+        <Route path="/seller" element={ <SellerScreen/> }>
+          <Route path=":sellerId" element={ <SellerScreen/> }/>
+        </Route>
+        <Route path="*" element={ <div>noay cafe</div> }/>
+      </Routes>
+    </UserProvider>
+  )
 }
 
 export default App;

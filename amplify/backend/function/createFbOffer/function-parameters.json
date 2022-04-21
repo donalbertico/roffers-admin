@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "api": {
+      "roffers": [
+        "Query"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
